@@ -1,0 +1,181 @@
+:root {
+  --primary: #2563eb;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #1e293b;
+  --danger: #ef4444;
+  --success: #22c55e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.container { width: 100%; max-width: 400px; }
+h1 { text-align: center; font-size: 1.5rem; margin-bottom: 20px; }
+
+/* 入力エリア */
+.input-section {
+  background: var(--card);
+  padding: 15px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  margin-bottom: 10px;
+}
+
+.category-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cat-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 5px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+.cat-btn.active {
+  background: #eff6ff;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+#memo {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+#recordBtn {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* 管理設定 */
+#toggleAdminBtn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin: 5px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.action-controls {
+  background: #f1f5f9;
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+.action-controls.hidden { display: none; }
+
+.controls-row { display: flex; gap: 8px; align-items: center; }
+
+#targetMonth {
+  flex: 2;
+  height: 40px;
+  padding: 0 5px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.85rem;
+}
+
+.btn-secondary, .btn-danger {
+  flex: 1;
+  height: 40px;
+  border-radius: 8px !important;
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.btn-secondary { background: var(--success); }
+.btn-danger { background: var(--danger); }
+
+/* 履歴リスト */
+ul { padding: 0; margin-top: 10px; }
+
+li {
+  background: var(--card);
+  margin-bottom: 8px;
+  padding: 10px 15px;
+  border-radius: 12px;
+  border-left: 4px solid var(--primary);
+  list-style: none;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.cat-wrapper {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.time-edit {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 0.8rem;
+  flex: 1;
+}
+
+.memo-text {
+  font-size: 0.95rem;
+  margin-left: 28px;
+  display: block;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.delete-btn {
+  background: transparent;
+  color: var(--danger);
+  border: none;
+  font-size: 0.75rem;
+  width: 100%;
+  text-align: right;
+  cursor: pointer;
+  padding-top: 5px;
+}
