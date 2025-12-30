@@ -72,25 +72,26 @@ function render() {
   // 月ごとにグループ化
   const groups = {};
   records.forEach(record => {
-    const month = record.time.substring(0, 7); // "2023-12" の形式
+    const month = record.time.substring(0, 7); // "2025-12" の形式
     if (!groups[month]) groups[month] = [];
     groups[month].push(record);
   });
 
+  // 今日の年月を取得 (例: "2025-12")
   const now = new Date();
   const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 
-  // 月ごとに表示
+  // グループ（月）のキーを降順でループ
   Object.keys(groups).sort().reverse().forEach(month => {
     const monthGroup = document.createElement('div');
-    monthGroup.className = 'month-group';
     
-    // 当月以外は初期状態で閉じ、当月は開く
-    const isCurrent = (month === currentMonth);
-    const isOpen = isCurrent ? 'open' : '';
-
+    // 【修正ポイント】ここでの判定を確実に
+    // month(2025-12) と currentMonth(2025-12) が一致すれば 'open' クラスを付与
+    const isOpenClass = (month === currentMonth) ? 'open' : '';
+    monthGroup.className = `month-group ${isOpenClass}`;
+    
     monthGroup.innerHTML = `
-      <div class="month-header ${isOpen}" onclick="this.parentElement.classList.toggle('open')">
+      <div class="month-header" onclick="this.parentElement.classList.toggle('open')">
         <span>${month.replace('-', '年')}月</span>
         <span class="count">${groups[month].length}件</span>
         <i class="fa-solid fa-chevron-down arrow"></i>
@@ -103,7 +104,6 @@ function render() {
     const ul = monthGroup.querySelector('.inner-list');
 
     groups[month].forEach((record) => {
-      // 以前の1件ずつのリスト表示ロジック（そのまま）
       const recordIndex = records.indexOf(record);
       const displayTime = record.time.substring(0, 16);
       const li = document.createElement('li');
@@ -120,10 +120,10 @@ function render() {
           <input type="datetime-local" class="time-edit" value="${displayTime}">
         </div>
         <span class="memo-text">${record.memo || "（メモなし）"}</span>
-        <button class="delete-btn" data-index="${recordIndex}"><i class="fa-solid fa-trash-can"></i> 削除</button>
+        <button class="delete-btn"><i class="fa-solid fa-trash-can"></i> 削除</button>
       `;
 
-      // イベント登録
+      // 各種イベント
       li.querySelector('.cat-edit').onchange = (e) => { records[recordIndex].category = e.target.value; saveAndRender(); };
       li.querySelector('.time-edit').onchange = (e) => { records[recordIndex].time = e.target.value; saveAndRender(); };
       li.querySelector('.memo-text').onclick = () => {
