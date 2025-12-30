@@ -65,15 +65,22 @@ h1 { text-align: center; font-size: 1.5rem; margin-bottom: 20px; }
   font-size: 1rem;
 }
 
+/* style.css の #recordBtn を書き換え */
 #recordBtn {
   width: 100%;
-  padding: 14px;
+  padding: 28px; /* 高さを2倍（14px → 28px）に */
   background: var(--primary);
   color: white;
-  border-radius: 8px;
+  border-radius: 12px; /* 少し角丸を強くしてモダンに */
   border: none;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 1.4rem; /* 文字も大きくして視認性アップ */
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); /* 押しやすそうな立体感 */
+  cursor: pointer;
+}
+
+#recordBtn:active {
+  transform: scale(0.98); /* 押した時の反発感 */
 }
 
 /* 管理設定 */
