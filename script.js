@@ -66,39 +66,78 @@ recordBtn.onclick = () => {
 // 描画
 function render() {
   recordList.innerHTML = '';
+  // 新しい順にソート
   records.sort((a, b) => new Date(b.time) - new Date(a.time));
 
-  records.forEach((record, index) => {
-    // 表示用：分まで（2桁固定の文字列を切り取る）
-    const displayTime = record.time.substring(0, 16);
+  // 月ごとにグループ化
+  const groups = {};
+  records.forEach(record => {
+    const month = record.time.substring(0, 7); // "2023-12" の形式
+    if (!groups[month]) groups[month] = [];
+    groups[month].push(record);
+  });
 
-    const li = document.createElement('li');
-    li.innerHTML = `
-      <div class="list-header">
-        <div class="cat-wrapper" style="position:relative;">
-          <select class="cat-edit" style="position:absolute; opacity:0; width:100%; height:100%; cursor:pointer;">
-            ${Object.keys(catIcons).map(cat => `<option value="${cat}" ${record.category === cat ? 'selected' : ''}>${catNames[cat]}</option>`).join('')}
-          </select>
-          <i class="fa-solid ${catIcons[record.category]}" style="color:var(--primary); width:20px; margin-right:5px;"></i>
-          <span style="font-size:0.85rem; font-weight:bold; color:var(--primary);">${catNames[record.category]} <i class="fa-solid fa-caret-down" style="font-size:0.6rem;"></i></span>
-        </div>
-        <input type="datetime-local" class="time-edit" value="${displayTime}">
+  const now = new Date();
+  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+  // 月ごとに表示
+  Object.keys(groups).sort().reverse().forEach(month => {
+    const monthGroup = document.createElement('div');
+    monthGroup.className = 'month-group';
+    
+    // 当月以外は初期状態で閉じ、当月は開く
+    const isCurrent = (month === currentMonth);
+    const isOpen = isCurrent ? 'open' : '';
+
+    monthGroup.innerHTML = `
+      <div class="month-header ${isOpen}" onclick="this.parentElement.classList.toggle('open')">
+        <span>${month.replace('-', '年')}月</span>
+        <span class="count">${groups[month].length}件</span>
+        <i class="fa-solid fa-chevron-down arrow"></i>
       </div>
-      <span class="memo-text">${record.memo || "（メモなし）"}</span>
-      <button class="delete-btn"><i class="fa-solid fa-trash-can"></i> 削除</button>
+      <div class="month-content">
+        <ul class="inner-list"></ul>
+      </div>
     `;
 
-    li.querySelector('.cat-edit').onchange = (e) => { records[index].category = e.target.value; saveAndRender(); };
-    li.querySelector('.time-edit').onchange = (e) => { records[index].time = e.target.value; saveAndRender(); };
-    li.querySelector('.memo-text').onclick = () => {
-      const newMemo = prompt("修正:", record.memo);
-      if (newMemo !== null) { records[index].memo = newMemo; saveAndRender(); }
-    };
-    li.querySelector('.delete-btn').onclick = () => {
-      if (confirm("削除しますか？")) { records.splice(index, 1); saveAndRender(); }
-    };
+    const ul = monthGroup.querySelector('.inner-list');
 
-    recordList.appendChild(li);
+    groups[month].forEach((record) => {
+      // 以前の1件ずつのリスト表示ロジック（そのまま）
+      const recordIndex = records.indexOf(record);
+      const displayTime = record.time.substring(0, 16);
+      const li = document.createElement('li');
+      li.className = 'record-item';
+      li.innerHTML = `
+        <div class="list-header">
+          <div class="cat-wrapper" style="position:relative;">
+            <select class="cat-edit" style="position:absolute; opacity:0; width:100%; height:100%; cursor:pointer;">
+              ${Object.keys(catIcons).map(cat => `<option value="${cat}" ${record.category === cat ? 'selected' : ''}>${catNames[cat]}</option>`).join('')}
+            </select>
+            <i class="fa-solid ${catIcons[record.category]}" style="color:var(--primary); width:20px; margin-right:5px;"></i>
+            <span style="font-size:0.85rem; font-weight:bold; color:var(--primary);">${catNames[record.category]} <i class="fa-solid fa-caret-down" style="font-size:0.6rem;"></i></span>
+          </div>
+          <input type="datetime-local" class="time-edit" value="${displayTime}">
+        </div>
+        <span class="memo-text">${record.memo || "（メモなし）"}</span>
+        <button class="delete-btn" data-index="${recordIndex}"><i class="fa-solid fa-trash-can"></i> 削除</button>
+      `;
+
+      // イベント登録
+      li.querySelector('.cat-edit').onchange = (e) => { records[recordIndex].category = e.target.value; saveAndRender(); };
+      li.querySelector('.time-edit').onchange = (e) => { records[recordIndex].time = e.target.value; saveAndRender(); };
+      li.querySelector('.memo-text').onclick = () => {
+        const m = prompt("修正:", record.memo);
+        if (m !== null) { records[recordIndex].memo = m; saveAndRender(); }
+      };
+      li.querySelector('.delete-btn').onclick = () => {
+        if (confirm("削除しますか？")) { records.splice(recordIndex, 1); saveAndRender(); }
+      };
+
+      ul.appendChild(li);
+    });
+
+    recordList.appendChild(monthGroup);
   });
 }
 
