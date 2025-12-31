@@ -103,25 +103,42 @@ function render() {
 
     const ul = monthGroup.querySelector('.inner-list');
 
-    groups[month].forEach((record) => {
-      const recordIndex = records.indexOf(record);
-      const displayTime = record.time.substring(0, 16);
-      const li = document.createElement('li');
-      li.className = 'record-item';
-      li.innerHTML = `
-        <div class="list-header">
-          <div class="cat-wrapper" style="position:relative;">
-            <select class="cat-edit" style="position:absolute; opacity:0; width:100%; height:100%; cursor:pointer;">
-              ${Object.keys(catIcons).map(cat => `<option value="${cat}" ${record.category === cat ? 'selected' : ''}>${catNames[cat]}</option>`).join('')}
-            </select>
-            <i class="fa-solid ${catIcons[record.category]}" style="color:var(--primary); width:20px; margin-right:5px;"></i>
-            <span style="font-size:0.85rem; font-weight:bold; color:var(--primary);">${catNames[record.category]} <i class="fa-solid fa-caret-down" style="font-size:0.6rem;"></i></span>
-          </div>
-          <input type="datetime-local" class="time-edit" value="${displayTime}">
-        </div>
-        <span class="memo-text">${record.memo || "（メモなし）"}</span>
-        <button class="delete-btn"><i class="fa-solid fa-trash-can"></i> 削除</button>
-      `;
+groups[month].forEach((record, i) => {
+  // --- 経過時間の計算 ---
+  let durationText = "";
+  // groups[month]の中で、次の要素（1つ前の記録）が存在する場合のみ計算
+  if (groups[month][i + 1]) {
+    const currentTime = new Date(record.time);
+    const prevTime = new Date(groups[month][i + 1].time);
+    const diffMs = currentTime - prevTime; // ミリ秒単位の差
+    const diffMin = Math.floor(diffMs / (1000 * 60)); // 分単位
+
+    if (diffMin > 0 && diffMin < 6000) { // 0分以上99時間59分(5999分)未満
+      const h = String(Math.floor(diffMin / 60)).padStart(2, '0');
+      const m = String(diffMin % 60).padStart(2, '0');
+      durationText = `<span class="duration"><i class="fa-regular fa-clock"></i> ${h}:${m}</span>`;
+    }
+  }
+
+  const recordIndex = records.indexOf(record);
+  const displayTime = record.time.substring(0, 16);
+  const li = document.createElement('li');
+  li.className = 'record-item';
+  li.innerHTML = `
+    <div class="list-header">
+      <div class="cat-wrapper" style="position:relative;">
+        <select class="cat-edit" style="position:absolute; opacity:0; width:100%; height:100%; cursor:pointer;">
+          ${Object.keys(catIcons).map(cat => `<option value="${cat}" ${record.category === cat ? 'selected' : ''}>${catNames[cat]}</option>`).join('')}
+        </select>
+        <i class="fa-solid ${catIcons[record.category]}" style="color:var(--primary); width:20px; margin-right:5px;"></i>
+        <span style="font-size:0.85rem; font-weight:bold; color:var(--primary);">${catNames[record.category]} <i class="fa-solid fa-caret-down" style="font-size:0.6rem;"></i></span>
+      </div>
+      <input type="datetime-local" class="time-edit" value="${displayTime}">
+      ${durationText} </div>
+    <span class="memo-text">${record.memo || "（メモなし）"}</span>
+    <button class="delete-btn"><i class="fa-solid fa-trash-can"></i> 削除</button>
+  `;
+  // ...（以下、イベント登録等の処理は変更なし）
 
       // 各種イベント
       li.querySelector('.cat-edit').onchange = (e) => { records[recordIndex].category = e.target.value; saveAndRender(); };
