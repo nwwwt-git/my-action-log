@@ -250,3 +250,17 @@ li {
   border-left: 4px solid var(--primary);
   list-style: none;
 }
+
+/* 経過時間のスタイル */
+.duration {
+  font-size: 0.75rem;
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: auto; /* 右端に寄せる */
+  font-family: monospace; /* 数字の幅を揃える */
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
