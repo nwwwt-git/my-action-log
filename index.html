@@ -4,19 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>行動ログ Pro</title>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="行動ログ">
-  <link rel="apple-touch-icon" href="icon.png">
-  <meta name="mobile-web-app-capable" content="yes">
-  <link rel="icon" sizes="192x192" href="icon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
   <div class="container">
-    <h1>行動ログ v0.7</h1>
+    <h1>行動ログ v0.8</h1>
     
     <div class="input-section">
       <div class="category-selector">
@@ -30,26 +26,23 @@
     </div>
 
     <div class="admin-wrapper">
-      <button id="toggleAdminBtn">
-        <i class="fa-solid fa-gear"></i> 管理設定を表示
-      </button>
-      
+      <button id="toggleAdminBtn"><i class="fa-solid fa-gear"></i> 管理設定を表示</button>
       <div id="adminPanel" class="action-controls hidden">
         <div class="controls-row">
           <input type="month" id="targetMonth">
-          <button id="downloadBtn" class="btn-secondary">
-            <i class="fa-solid fa-file-csv"></i><span>保存</span>
-          </button>
-          <button id="deleteMonthBtn" class="btn-danger">
-            <i class="fa-solid fa-trash-can"></i><span>削除</span>
-          </button>
+          <button id="downloadBtn" class="btn-secondary">CSV保存</button>
+          <button id="deleteMonthBtn" class="btn-danger">月間削除</button>
+        </div>
+        <div class="controls-row" style="margin-top:10px;">
+          <button id="exportBtn" class="btn-info"><i class="fa-solid fa-file-export"></i> バックアップ</button>
+          <button id="importBtn" class="btn-info"><i class="fa-solid fa-file-import"></i> 復元</button>
+          <input type="file" id="importFile" style="display:none;" accept=".json">
         </div>
       </div>
     </div>
 
     <ul id="recordList"></ul>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
