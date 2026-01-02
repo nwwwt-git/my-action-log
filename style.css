@@ -4,263 +4,40 @@
   --card: #ffffff;
   --text: #1e293b;
   --danger: #ef4444;
-  --success: #22c55e;
+  --info: #6366f1;
 }
 
-* { box-sizing: border-box; }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
-  margin: 0;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.container { width: 100%; max-width: 400px; }
+body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+.container { max-width: 500px; margin: 0 auto; }
 h1 { text-align: center; font-size: 1.5rem; margin-bottom: 20px; }
 
-/* 入力エリア */
-.input-section {
-  background: var(--card);
-  padding: 15px;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  margin-bottom: 10px;
-}
+.category-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+.cat-btn { background: white; border: 2px solid #e2e8f0; border-radius: 10px; padding: 10px 5px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 0.75rem; }
+.cat-btn.active { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
+.cat-btn i { font-size: 1.2rem; }
 
-.category-selector {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-bottom: 12px;
-}
+#memo { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; box-sizing: border-box; font-size: 1rem; }
 
-.cat-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px 5px;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  background: white;
-  cursor: pointer;
-  -webkit-appearance: none;
-}
+#recordBtn { width: 100%; padding: 25px; background: var(--primary); color: white; border-radius: 12px; border: none; font-weight: bold; font-size: 1.3rem; cursor: pointer; box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
 
-.cat-btn.active {
-  background: #eff6ff;
-  border-color: var(--primary);
-  color: var(--primary);
-}
+.admin-wrapper { margin: 20px 0; }
+#toggleAdminBtn { width: 100%; background: none; border: none; color: #64748b; font-size: 0.85rem; cursor: pointer; }
+.hidden { display: none; }
+.action-controls { background: white; padding: 15px; border-radius: 12px; margin-top: 10px; border: 1px solid #e2e8f0; }
+.controls-row { display: flex; gap: 8px; }
+.controls-row input, .controls-row button { flex: 1; height: 38px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 0.8rem; }
+.btn-danger { background: #fee2e2; color: var(--danger); border: none; font-weight: bold; }
+.btn-info { background: var(--info); color: white; border: none; }
 
-#memo {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  font-size: 1rem;
-}
+.month-group { margin-bottom: 15px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.month-header { padding: 12px 15px; background: #f1f5f9; display: flex; align-items: center; cursor: pointer; font-weight: bold; }
+.month-content { display: none; padding: 10px; }
+.month-group.open .month-content { display: block; }
 
-/* style.css の #recordBtn を書き換え */
-#recordBtn {
-  width: 100%;
-  padding: 28px; /* 高さを2倍（14px → 28px）に */
-  background: var(--primary);
-  color: white;
-  border-radius: 12px; /* 少し角丸を強くしてモダンに */
-  border: none;
-  font-weight: bold;
-  font-size: 1.4rem; /* 文字も大きくして視認性アップ */
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); /* 押しやすそうな立体感 */
-  cursor: pointer;
-}
+.day-header { padding: 8px 10px; background: #f8fafc; font-size: 0.75rem; font-weight: bold; color: #94a3b8; border-bottom: 1px solid #f1f5f9; margin-top: 10px; }
 
-#recordBtn:active {
-  transform: scale(0.98); /* 押した時の反発感 */
-}
+.record-item { position: relative; background: #fff; margin-bottom: 6px; padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary); list-style: none; border: 1px solid #f1f5f9; }
+.duration { font-size: 0.7rem; background: #f1f5f9; color: #64748b; padding: 2px 6px; border-radius: 4px; font-family: monospace; margin-left: auto; }
+.memo-text { font-size: 0.95rem; margin-top: 4px; display: block; padding-right: 40px; color: #334155; }
 
-/* 管理設定 */
-#toggleAdminBtn {
-  background: transparent;
-  border: none;
-  color: #64748b;
-  font-size: 0.8rem;
-  cursor: pointer;
-  margin: 5px 0 10px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.action-controls {
-  background: #f1f5f9;
-  padding: 10px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-}
-
-.action-controls.hidden { display: none; }
-
-.controls-row { display: flex; gap: 8px; align-items: center; }
-
-#targetMonth {
-  flex: 2;
-  height: 40px;
-  padding: 0 5px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  font-size: 0.85rem;
-}
-
-.btn-secondary, .btn-danger {
-  flex: 1;
-  height: 40px;
-  border-radius: 8px !important;
-  border: none;
-  color: white;
-  font-weight: bold;
-  font-size: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  cursor: pointer;
-}
-
-.btn-secondary { background: var(--success); }
-.btn-danger { background: var(--danger); }
-
-/* 履歴リスト */
-ul { padding: 0; margin-top: 10px; }
-
-li {
-  background: var(--card);
-  margin-bottom: 8px;
-  padding: 10px 15px;
-  border-radius: 12px;
-  border-left: 4px solid var(--primary);
-  list-style: none;
-}
-
-.list-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 4px;
-}
-
-.cat-wrapper {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.time-edit {
-  border: none;
-  background: transparent;
-  color: #64748b;
-  font-size: 0.8rem;
-  flex: 1;
-}
-
-.memo-text {
-  font-size: 0.95rem;
-  margin-left: 28px;
-  display: block;
-  cursor: pointer;
-  line-height: 1.4;
-}
-
-.delete-btn {
-  background: transparent;
-  color: var(--danger);
-  border: none;
-  font-size: 0.75rem;
-  width: 100%;
-  text-align: right;
-  cursor: pointer;
-  padding-top: 5px;
-}
-
-/* 月ごとのグループデザイン */
-.month-group {
-  margin-bottom: 10px;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.month-header {
-  padding: 12px 15px;
-  background: #f8fafc;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 0.9rem;
-  color: #475569;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.month-header .count {
-  font-size: 0.75rem;
-  background: #e2e8f0;
-  padding: 2px 8px;
-  border-radius: 10px;
-  margin-left: auto;
-  margin-right: 10px;
-}
-
-.month-header .arrow {
-  transition: transform 0.3s ease;
-}
-
-/* 開閉の切り替え */
-.month-content {
-  display: none; /* 通常は隠す */
-  padding: 10px;
-}
-
-.month-group.open .month-content {
-  display: block; /* openクラスがついたら表示 */
-}
-
-.month-group.open .arrow {
-  transform: rotate(180deg); /* 矢印を回転 */
-}
-
-.inner-list {
-  padding: 0;
-  margin: 0;
-}
-
-/* 既存の li のスタイルを .record-item に適用 */
-.record-item {
-  background: var(--bg); /* グループ内は少し色を変える */
-  margin-bottom: 8px;
-  padding: 10px 15px;
-  border-radius: 10px;
-  border-left: 4px solid var(--primary);
-  list-style: none;
-}
-
-/* 経過時間のスタイル */
-.duration {
-  font-size: 0.75rem;
-  background: #f1f5f9;
-  color: #64748b;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: auto; /* 右端に寄せる */
-  font-family: monospace; /* 数字の幅を揃える */
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
+.delete-btn { position: absolute; right: 8px; bottom: 8px; background: #fff1f1; color: var(--danger); border: none; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
