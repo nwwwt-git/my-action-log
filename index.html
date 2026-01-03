@@ -8,40 +8,43 @@
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
   <div class="container">
-    <h1>行動ログ v0.10</h1>
-    
-    <div class="input-section">
-      <div class="category-selector">
-        <button class="cat-btn active" data-cat="work"><i class="fa-solid fa-briefcase"></i><span>仕事</span></button>
-        <button class="cat-btn" data-cat="rest"><i class="fa-solid fa-couch"></i><span>休憩</span></button>
-        <button class="cat-btn" data-cat="move"><i class="fa-solid fa-car-side"></i><span>移動</span></button>
-        <button class="cat-btn" data-cat="other"><i class="fa-solid fa-icons"></i><span>他</span></button>
+    <div class="fixed-header">
+      <h1>行動ログ v0.11</h1>
+      
+      <div class="input-section">
+        <div class="category-selector">
+          <button class="cat-btn active" data-cat="work"><i class="fa-solid fa-briefcase"></i><span>仕事</span></button>
+          <button class="cat-btn" data-cat="rest"><i class="fa-solid fa-couch"></i><span>休憩</span></button>
+          <button class="cat-btn" data-cat="move"><i class="fa-solid fa-car-side"></i><span>移動</span></button>
+          <button class="cat-btn" data-cat="other"><i class="fa-solid fa-icons"></i><span>他</span></button>
+        </div>
+        <input type="text" id="memo" placeholder="メモを入力（任意）">
+        <button id="recordBtn">記録する</button>
       </div>
-      <input type="text" id="memo" placeholder="メモを入力（任意）">
-      <button id="recordBtn">記録する</button>
+
+      <div class="admin-wrapper">
+        <button id="toggleAdminBtn"><i class="fa-solid fa-gear"></i> 管理設定を表示</button>
+        <div id="adminPanel" class="action-controls hidden">
+          <div class="controls-row">
+            <input type="month" id="targetMonth">
+            <button id="downloadBtn" style="background:#f1f5f9; color:#475569;">CSV保存</button>
+            <button id="deleteMonthBtn" class="btn-danger">月間削除</button>
+          </div>
+          <div class="controls-row">
+            <button id="exportBtn" class="btn-info">バックアップ</button>
+            <button id="importBtn" class="btn-info">復元</button>
+            <input type="file" id="importFile" style="display:none;" accept=".json">
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="admin-wrapper">
-      <button id="toggleAdminBtn"><i class="fa-solid fa-gear"></i> 管理設定を表示</button>
-      <div id="adminPanel" class="action-controls hidden">
-        <div class="controls-row">
-          <input type="month" id="targetMonth">
-          <button id="downloadBtn" class="btn-secondary">CSV保存</button>
-          <button id="deleteMonthBtn" class="btn-danger">月間削除</button>
-        </div>
-        <div class="controls-row" style="margin-top:10px;">
-          <button id="exportBtn" class="btn-info"><i class="fa-solid fa-file-export"></i> バックアップ</button>
-          <button id="importBtn" class="btn-info"><i class="fa-solid fa-file-import"></i> 復元</button>
-          <input type="file" id="importFile" style="display:none;" accept=".json">
-        </div>
-      </div>
+    <div id="recordListContainer">
+      <ul id="recordList"></ul>
     </div>
-
-    <ul id="recordList"></ul>
   </div>
   <script src="script.js"></script>
 </body>
