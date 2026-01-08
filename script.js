@@ -44,7 +44,7 @@ recordBtn.onclick = () => {
   saveAndRender();
 };
 
-// ...省略（冒頭の変数定義やイベント設定はそのまま使用してください）...
+// ...（冒頭の変数宣言部分は以前と同じ）...
 
 function render() {
   recordList.innerHTML = '';
@@ -67,9 +67,9 @@ function render() {
     monthGroup.innerHTML = `
       <div class="month-header">
         <span>${month.replace('-', '年')}月</span>
-        <i class="fa-solid fa-chevron-down"></i>
+        <i class="fa-solid fa-chevron-down" style="margin-left:auto;"></i>
       </div>
-      <div class="month-content"><ul style="padding:0; margin:0; list-style:none;"></ul></div>
+      <div class="month-content"><ul style="padding:0; margin:0;"></ul></div>
     `;
 
     monthGroup.querySelector('.month-header').onclick = () => monthGroup.classList.toggle('open');
@@ -88,6 +88,7 @@ function render() {
         lastDate = datePart;
       }
 
+      // 経過時間の計算
       let durationText = "";
       if (groups[month][i + 1]) {
         const diff = Math.floor((new Date(record.time) - new Date(groups[month][i + 1].time)) / 60000);
@@ -100,46 +101,50 @@ function render() {
       const li = document.createElement('li');
       li.className = 'record-item';
       li.innerHTML = `
-        <div class="log-icon-box">
-          <i class="fa-solid ${catIcons[record.category]}"></i>
-        </div>
-        <div class="item-main">
-          <div class="item-row1">
-            <span class="item-name">${catNames[record.category]}</span>
-            ${durationText}
+        <div class="item-top">
+          <div class="cat-display">
+            <select class="cat-edit-overlay">
+              ${Object.keys(catIcons).map(c => `<option value="${c}" ${record.category===c?'selected':''}>${catNames[c]}</option>`).join('')}
+            </select>
+            <i class="fa-solid ${catIcons[record.category]}" style="color:var(--primary); font-size:1rem; width:18px;"></i>
+            <span style="font-size:0.85rem; font-weight:bold; color:var(--primary);">${catNames[record.category]}</span>
           </div>
-          <div class="item-row2">
-            <input type="time" class="time-edit" value="${record.time.substring(11,16)}">
-            <span class="memo-text">${record.memo || "メモなし"}</span>
+          <div class="time-display">
+            <input type="datetime-local" class="dt-edit-overlay" value="${record.time}">
+            ${record.time.substring(11, 16)}
           </div>
+          ${durationText}
         </div>
-        <button class="delete-btn" onclick="deleteRecord(${recordIndex})">×</button>
+        <div class="memo-text">${record.memo || "..." }</div>
+        <button class="delete-btn"><i class="fa-solid fa-trash-can"></i></button>
       `;
 
-      // イベント設定
-      li.querySelector('.time-edit').onchange = (e) => { 
-        records[recordIndex].time = record.time.substring(0,11) + e.target.value; 
-        saveAndRender(); 
+      // 種類変更イベント
+      li.querySelector('.cat-edit-overlay').onchange = (e) => {
+        records[recordIndex].category = e.target.value;
+        saveAndRender();
       };
-      li.querySelector('.memo-text').onclick = () => { 
-        const m = prompt("メモ修正:", record.memo); 
+      // 日時変更イベント
+      li.querySelector('.dt-edit-overlay').onchange = (e) => {
+        records[recordIndex].time = e.target.value;
+        saveAndRender();
+      };
+      // メモ変更
+      li.querySelector('.memo-text').onclick = () => {
+        const m = prompt("メモ修正:", record.memo);
         if(m!==null){ records[recordIndex].memo = m; saveAndRender(); }
       };
+      // 削除
+      li.querySelector('.delete-btn').onclick = () => {
+        if(confirm("削除しますか？")) { records.splice(recordIndex, 1); saveAndRender(); }
+      };
+
       ul.appendChild(li);
     });
     recordList.appendChild(monthGroup);
   });
 }
-
-// 削除用の関数をグローバルに
-window.deleteRecord = function(index) {
-  if(confirm("削除しますか？")) {
-    records.splice(index, 1);
-    saveAndRender();
-  }
-};
-
-// ...残りの downloadBtn, exportBtn 等の関数はそのまま末尾に維持してください...
+// ...（saveAndRender以下の関数は以前と同じ）...
 
 function saveAndRender() { localStorage.setItem('actionLogs', JSON.stringify(records)); render(); }
 
