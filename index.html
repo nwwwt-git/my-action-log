@@ -1,22 +1,51 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>行動ログ Pro</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>行動ログ Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
 </head>
 <body>
-    <div class="container">
-        <h1>行動ログ v0.12</h1>
-        <div class="input-group">
-            <input type="text" id="activity" placeholder="何をした？" autofocus>
-            <button id="add-btn">記録する</button>
+  <div class="container">
+    <div class="fixed-header">
+      <h1>行動ログ v0.11</h1>
+      
+      <div class="input-section">
+        <div class="category-selector">
+          <button class="cat-btn active" data-cat="work"><i class="fa-solid fa-briefcase"></i><span>仕事</span></button>
+          <button class="cat-btn" data-cat="rest"><i class="fa-solid fa-couch"></i><span>休憩</span></button>
+          <button class="cat-btn" data-cat="move"><i class="fa-solid fa-car-side"></i><span>移動</span></button>
+          <button class="cat-btn" data-cat="other"><i class="fa-solid fa-icons"></i><span>他</span></button>
         </div>
-        <div id="log-list"></div>
+        <input type="text" id="memo" placeholder="メモを入力（任意）">
+        <button id="recordBtn">記録する</button>
+      </div>
+
+      <div class="admin-wrapper">
+        <button id="toggleAdminBtn"><i class="fa-solid fa-gear"></i> 管理設定を表示</button>
+        <div id="adminPanel" class="action-controls hidden">
+          <div class="controls-row">
+            <input type="month" id="targetMonth">
+            <button id="downloadBtn" style="background:#f1f5f9; color:#475569;">CSV保存</button>
+            <button id="deleteMonthBtn" class="btn-danger">月間削除</button>
+          </div>
+          <div class="controls-row">
+            <button id="exportBtn" class="btn-info">バックアップ</button>
+            <button id="importBtn" class="btn-info">復元</button>
+            <input type="file" id="importFile" style="display:none;" accept=".json">
+          </div>
+        </div>
+      </div>
     </div>
-    <script src="script.js"></script>
+
+    <div id="recordListContainer">
+      <ul id="recordList"></ul>
+    </div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
